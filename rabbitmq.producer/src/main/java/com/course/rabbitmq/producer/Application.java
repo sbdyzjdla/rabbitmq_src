@@ -1,6 +1,7 @@
 package com.course.rabbitmq.producer;
 
 import com.course.rabbitmq.producer.entity.Employee;
+import com.course.rabbitmq.producer.entity.Furniture;
 import com.course.rabbitmq.producer.entity.Picture;
 import com.course.rabbitmq.producer.producer.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +30,19 @@ public class Application implements CommandLineRunner {
 //	@Autowired
 //	private HumanResourceProducer producer;
 
+//	@Override
+//	public void run(String... args) throws Exception {
+//		for(int i=0; i<5; ++i) {
+//			var employee = new Employee("emp" + i, "Employee" +i, LocalDate.now());
+//			producer.sendMessage(employee);
+//		}
+//	}
+
 //	@Autowired
 //	private PictureProducer producer;
 
 	@Autowired
-	private PictureProducerTwo producer;
+	private MyPictureProducer producer;
 
 	// valid source
 	private final List<String> SOURCES = List.of("mobile", "web");
@@ -45,24 +54,39 @@ public class Application implements CommandLineRunner {
 		SpringApplication.run(Application.class, args);
 	}
 
-//	@Override
-//	public void run(String... args) throws Exception {
-//		for(int i=0; i<5; ++i) {
-//			var employee = new Employee("emp" + i, "Employee" +i, LocalDate.now());
-//			producer.sendMessage(employee);
-//		}
-//	}
-
 	@Override
 	public void run(String... args) throws Exception {
-		for(int i=0; i<10; ++i) {
+		for(int i=0; i<1; ++i) {
 			var picture = new Picture();
 			picture.setName("Picture " + i);
-			picture.setSize(ThreadLocalRandom.current().nextLong(1, 10000));
+			picture.setSize(ThreadLocalRandom.current().nextLong(9000, 10000));
 			picture.setSource(SOURCES.get(i % SOURCES.size()));
 			picture.setType(TYPES.get(i % TYPES.size()));
 
 			producer.sendMessage(picture);
 		}
 	}
+
+	/*
+	@Autowired
+	private FurnitureProducer producer;
+
+	private final List<String> COLORS = List.of("write", "red", "green");
+
+	private final List<String> MATERIALS = List.of("wood", "plastic", "steel");
+
+
+	@Override
+	public void run(String... args) throws Exception {
+		for(int i=0; i<10; ++i) {
+			Furniture furniture = new Furniture();
+			furniture.setName("Furniture " + i);
+			furniture.setColor(COLORS.get(i % COLORS.size()));
+			furniture.setMaterial(MATERIALS.get(i % MATERIALS.size()));
+			furniture.setPrice(i);
+
+			producer.sendMessage(furniture);
+		}
+	}
+	*/
 }
